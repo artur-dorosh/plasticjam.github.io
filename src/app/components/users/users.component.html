@@ -1,0 +1,99 @@
+<header>
+  <div class="head">
+    <div class="head__logo">AppCo</div>
+  </div>
+</header>
+
+<main>
+  <app-breadcrumbs></app-breadcrumbs>
+  <div class="title">Users statistics</div>
+
+  <div class="container">
+    <table class="table">
+      <tr class="table__row--heading">
+        <th class="table__head">Id</th>
+        <th class="table__head">First name</th>
+        <th class="table__head">Last name</th>
+        <th class="table__head">Email</th>
+        <th class="table__head">Gender</th>
+        <th class="table__head">IP address</th>
+        <th class="table__head">Total clicks</th>
+        <th class="table__head">Total page views</th>
+      </tr>
+      <tr class="table__row" *ngFor="let user of users" routerLink="user/{{user.firstName}}_{{user.lastName}}?id={{ user.id }}">
+        <td class="table__data">{{ user.number }}</td>
+        <td class="table__data">{{ user.firstName }}</td>
+        <td class="table__data">{{ user.lastName }}</td>
+        <td class="table__data">{{ user.email }}</td>
+        <td class="table__data">{{ user.gender }}</td>
+        <td class="table__data">{{ user.ipAddress }}</td>
+        <td class="table__data">{{ user.totalClicks }}</td>
+        <td class="table__data">{{ user.totalPageViews }}</td>
+      </tr>
+    </table>
+
+    <div class="pagination">
+      <button
+        class="previous"
+        [disabled]="previousPageDisabled"
+        [ngClass]="{'previous--active': !previousPageDisabled}"
+        (click)="previousPage()">
+      </button>
+      <div
+        class="pagination__item"
+        [ngClass]="{'pagination__item--active': currentPage === 1}"
+        (click)="activatePage(currentPage === 1 ? currentPage : currentPage === 2 ? currentPage - 1 : currentPage - 2)"
+        [routerLinkActive]="['pagination__item--active']"
+        [routerLink]="['/statistics']"
+        [queryParams]="{'page': 1}">
+        {{ currentPage === 1 ? currentPage : currentPage === 2 ? currentPage - 1 : currentPage - 2 }}
+      </div>
+      <div
+        class="pagination__item"
+        (click)="activatePage(currentPage === 1 ? currentPage + 1 : currentPage === 2 ? currentPage :  currentPage - 1)"
+        [routerLinkActive]="['pagination__item--active']"
+        [routerLink]="['/statistics']"
+        [queryParams]="{'page': 2}">
+        {{ currentPage === 1 ? currentPage + 1 : currentPage === 2 ? currentPage :  currentPage - 1 }}
+      </div>
+      <div
+        class="pagination__item"
+        (click)="activatePage(currentPage === 1 ? currentPage + 2 : currentPage === 2 ? currentPage + 1 :  currentPage)"
+        [routerLinkActive]="['pagination__item--active']"
+        [routerLink]="['/statistics']"
+        [queryParams]="{'page': 3}">
+        {{ currentPage === 1 ? currentPage + 2 : currentPage === 2 ? currentPage + 1 :  currentPage }}
+      </div>
+      <div
+        class="pagination__item"
+        (click)="activatePage(currentPage === 1 ? currentPage + 3 : currentPage === 2 ? currentPage + 2 :  currentPage + 1)"
+        [routerLinkActive]="['pagination__item--active']"
+        [routerLink]="['/statistics']"
+        [queryParams]="{'page': 4}">
+        {{ currentPage === 1 ? currentPage + 3 : currentPage === 2 ? currentPage + 2 :  currentPage + 1 }}
+      </div>
+      <div
+        class="pagination__item"
+        (click)="activatePage(currentPage === 1 ? currentPage + 4 : currentPage === 2 ? currentPage + 3 :  currentPage + 2)"
+        [routerLinkActive]="['pagination__item--active']"
+        [routerLink]="['/statistics']"
+        [queryParams]="{'page': 5}">
+        {{ currentPage === 1 ? currentPage + 4 : currentPage === 2 ? currentPage + 3 :  currentPage + 2 }}
+      </div>
+      <button
+        class="next"
+        [disabled]="nextPageDisabled"
+        [ngClass]="{'next--active': !nextPageDisabled}"
+        (click)="nextPage()">
+      </button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer">
+    <div class="footer__logo">AppCo</div>
+    <div class="footer__rights">All rights reserved by ThemeTags</div>
+    <div class="footer__copyrights">Copyrights © 2019.</div>
+  </div>
+</footer>

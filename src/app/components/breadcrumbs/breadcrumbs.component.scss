@@ -1,0 +1,35 @@
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  margin-left: 130px;
+  font-size: 16px;
+  line-height: 20px;
+  color: #ccc;
+  font-family: 'Montserrat', sans-serif;
+
+  &__item {
+    position: relative;
+    margin: 15px 20px 25px 0;
+    outline: none;
+
+    &::after {
+      position: absolute;
+      content: ">";
+      right: -14px;
+      color: #ccc;
+    }
+
+    &:last-child::after {
+      content: '';
+    }
+  }
+
+  &__label {
+    outline: none;
+    cursor: pointer;
+
+    &--active {
+      color: #3A80BA;
+    }
+  }
+}
