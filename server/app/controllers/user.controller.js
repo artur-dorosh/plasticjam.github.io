@@ -43,7 +43,7 @@ exports.findAllUsers = (req, res) => {
 
 exports.findStatistic = (req, res) => {
   let userId = req.query.id ? req.query.id : '';
-  let from = req.query.from ? moment(req.query.from) : moment().subtract(7,'days');
+  let from = req.query.from ? moment(req.query.from) : moment().subtract(6,'days');
   let until = req.query.to ? moment(req.query.to) : moment();
 
   let length = moment(until).diff(from, 'days');
