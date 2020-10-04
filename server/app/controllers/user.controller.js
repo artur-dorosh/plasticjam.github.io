@@ -6,8 +6,8 @@ const Statistic = db.statistics;
 var moment = require('moment');
 
 exports.findAllUsers = (req, res) => {
-  let page = req.query.page ? req.query.page : 0;
-  let range = req.query.range ? req.query.range : 5;
+  let page = req.query.page ? +req.query.page : 0;
+  let range = req.query.range ? +req.query.range : 5;
 
   let body = {
     "content": [],
@@ -27,7 +27,7 @@ exports.findAllUsers = (req, res) => {
       });
     });
 
-  User.find({ $and: [ {number: { $gt: (+page - 1) * +range }}, {number: { $lt: ((+page - 1) * +range) + (+range + 1) }} ]})
+  User.find({ $and: [ {number: { $gt: +page * +range }}, {number: { $lt: (+page * +range) + (+range + 1) }} ]})
     .then(data => {
       body.content = data;
 

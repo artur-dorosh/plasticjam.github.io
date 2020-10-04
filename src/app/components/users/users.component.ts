@@ -1,53 +1,89 @@
-import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
-import {UserService} from "../../services/user.service";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { UserService } from '../../services/user.service';
+import { IUser } from '../../models/user.interface';
+import { Subject } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
+import { defaultPagination, IPagination } from '../../constants/pagination.constant';
 
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
-export class UsersComponent implements OnInit {
-  users: any;
-  maxItemsCount: number;
-  totalPages: number;
-  public currentPage: number;
-  public previousPageDisabled: boolean = true;
-  public nextPageDisabled: boolean = false;
+export class UsersComponent implements OnInit, OnDestroy {
+  public users: IUser[];
+  public totalPages: number[] = [];
+
+  public params = defaultPagination;
+
+  public previousPageDisabled = true;
+  public nextPageDisabled = false;
+
+  private onDestroyed$ = new Subject<any>();
 
   constructor(
-    private activatedRoute: ActivatedRoute,
+    private route: ActivatedRoute,
     private router: Router,
     private userService: UserService
   ) { }
 
-  ngOnInit() {
-    this.activatedRoute.queryParams.subscribe(params => {
-      this.currentPage = +params['page'] || 1;
-      this.maxItemsCount = +params['range'] || 6;
+  ngOnInit(): void {
+    this.navigate();
 
-      this.userService.getAllUsers({page: this.currentPage, range: this.maxItemsCount}).subscribe(data => {
-        // @ts-ignore
-        this.users = data.content;
-        // @ts-ignore
-        this.totalPages = data.totalPages;
-      }, error => console.log(error));
+    this.route.queryParams.pipe(
+      switchMap((params: IPagination) => {
+        this.params = {
+          page: +params.page || defaultPagination.page,
+          range: +params.range || defaultPagination.range
+        };
 
-      this.previousPageDisabled = this.currentPage === 1;
-      this.nextPageDisabled = this.currentPage === this.totalPages;
+        return this.userService.getAllUsers(this.params).pipe(
+          takeUntil(this.onDestroyed$)
+        );
+      })
+    ).subscribe((data: {content: IUser[], totalPages: number, totalElements: number}) => {
+      this.users = data.content;
+      this.totalPages = new Array(data.totalPages);
 
+      this.previousPageDisabled = this.params.page === 0;
+      this.nextPageDisabled = (this.params.page + 1) === this.totalPages.length;
     });
   }
 
-  public activatePage(count): void {
-    this.router.navigate(['statistics'], {queryParams: {page: count}});
+  public activatePage(pageIndex: number): void {
+    this.params = {
+      ...this.params,
+      page: pageIndex,
+    };
+    this.navigate();
   }
 
   public nextPage(): void {
-    this.router.navigate(['statistics'], {queryParams: {page: this.currentPage + 1}});
+    if (this.params.page + 1 < this.totalPages.length) {
+      this.params.page++;
+      this.navigate();
+    }
   }
 
   public previousPage(): void {
-    this.router.navigate(['statistics'], {queryParams: {page: this.currentPage - 1}});
+    if (this.params.page > 0) {
+      this.params.page--;
+      this.navigate();
+    }
+  }
+
+  private navigate(): void {
+    this.router.navigate([window.location.pathname], {
+      queryParams: {
+        ...this.route.snapshot.queryParams,
+        ...this.params
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroyed$.next();
+    this.onDestroyed$.complete();
   }
 }
