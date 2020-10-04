@@ -1,34 +1,22 @@
-<header>
-  <div class="head">
-    <div class="head__logo">AppCo</div>
-  </div>
-</header>
-
-<main>
-  <app-breadcrumbs></app-breadcrumbs>
-  <div class="title">{{ userName }}</div>
-  <div class="flex">
-    From: <input type="date" name="from" class="datePicker" [ngModel]="from | date:'yyyy-MM-dd'" (ngModelChange)="changeFromDate($event)">
-    To: <input type="date" name="until" class="datePicker" [ngModel]="till | date:'yyyy-MM-dd'" (ngModelChange)="changeTillDate($event)">
-  </div>
+<div class="title">{{ userName }}</div>
+<div class="flex">
+  From: <input type="date"
+               name="from"
+               class="datePicker"
+               [ngModel]="from | date:'yyyy-MM-dd'" (ngModelChange)="changeFromDate($event)">
+  To: <input type="date"
+             name="until"
+             class="datePicker"
+             [ngModel]="till | date:'yyyy-MM-dd'" (ngModelChange)="changeTillDate($event)">
+</div>
 
 
-  <div class="label">Clicks</div>
+<div class="label">Clicks</div>
+<div *ngIf="chart" class="chart">
+  <canvas id="clicks">{{ chart }}</canvas>
+</div>
 
-  <div *ngIf="chart" class="chart">
-    <canvas id="clicks">{{ chart }}</canvas>
-  </div>
-
-  <div class="label">Views</div>
-  <div *ngIf="chart" class="chart">
-    <canvas id="views">{{ chart }}</canvas>
-  </div>
-</main>
-
-<footer>
-  <div class="footer">
-    <div class="footer__logo">AppCo</div>
-    <div class="footer__rights">All rights reserved by ThemeTags</div>
-    <div class="footer__copyrights">Copyrights © 2019.</div>
-  </div>
-</footer>
+<div class="label">Views</div>
+<div *ngIf="chart" class="chart">
+  <canvas id="views">{{ chart }}</canvas>
+</div>

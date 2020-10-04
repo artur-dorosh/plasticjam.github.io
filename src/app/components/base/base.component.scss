@@ -1,0 +1,54 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  height: 72px;
+  font-family: 'Montserrat', sans-serif;
+  background: #3A80BA;
+  color: #fff;
+
+  &__logo {
+    margin-left: 130px;
+    font-size: 40px;
+    line-height: 49px;
+    outline: none;
+  }
+}
+
+main {
+  flex: 2;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  height: 57px;
+  font-family: 'Montserrat', sans-serif;
+  background: #1C3B55;
+  color: #fff;
+
+  &__logo {
+    margin-left: 130px;
+    font-size: 24px;
+    line-height: 29px;
+  }
+
+  &__rights {
+    font-size: 16px;
+    line-height: 142%;
+  }
+
+  &__copyrights {
+    margin-right: 130px;
+    font-size: 16px;
+    line-height: 142%;
+  }
+}
