@@ -19,7 +19,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
   public user: IUserInfo;
 
-  private onDestroyed$ = new Subject<any>();
+  private onDestroyed$ = new Subject<void>();
 
   constructor(
     private router: Router,

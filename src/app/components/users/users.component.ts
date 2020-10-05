@@ -20,7 +20,7 @@ export class UsersComponent implements OnInit, OnDestroy {
   public previousPageDisabled = true;
   public nextPageDisabled = false;
 
-  private onDestroyed$ = new Subject<any>();
+  private onDestroyed$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,

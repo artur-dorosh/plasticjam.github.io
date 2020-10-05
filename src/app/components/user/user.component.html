@@ -3,11 +3,14 @@
   From: <input type="date"
                name="from"
                class="datePicker"
-               [ngModel]="from | date:'yyyy-MM-dd'" (ngModelChange)="changeFromDate($event)">
+               [ngModel]="params.from | date:'yyyy-MM-dd'"
+               (change)="changeDate($event, 'from')">
+
   To: <input type="date"
              name="until"
              class="datePicker"
-             [ngModel]="till | date:'yyyy-MM-dd'" (ngModelChange)="changeTillDate($event)">
+             [ngModel]="params.till | date:'yyyy-MM-dd'"
+             (change)="changeDate($event, 'till')">
 </div>
 
 
