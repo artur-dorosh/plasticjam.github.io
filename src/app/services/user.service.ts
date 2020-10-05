@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { IStatistic } from '../models/statistic.interface';
 
 const baseUrl = 'http://localhost:8080/task/api/v1/users';
@@ -9,6 +9,7 @@ const baseUrl = 'http://localhost:8080/task/api/v1/users';
   providedIn: 'root'
 })
 export class UserService {
+  test = new Subject();
 
   constructor(private http: HttpClient) { }
 

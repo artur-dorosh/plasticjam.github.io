@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { Chart } from 'chart.js';
-import { switchMap, takeUntil } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { IStatistic } from '../../models/statistic.interface';
 
@@ -12,9 +12,6 @@ import { IStatistic } from '../../models/statistic.interface';
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit, OnDestroy {
-  public from = this.formatDate(new Date(), 6);
-  public till = this.formatDate(new Date());
-
   public userId: string;
   public userName: string;
 
@@ -24,7 +21,10 @@ export class UserComponent implements OnInit, OnDestroy {
   public clicks: any;
   public dates: any;
 
-  private onDestroyed$ = new Subject<any>();
+  public params = {
+    from: this.formatDate(new Date(), 6),
+    till: this.formatDate(new Date()),
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -33,10 +33,12 @@ export class UserComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.navigate();
+
     this.route.queryParams.pipe(
-      switchMap((params: {name: string, id: string}) => {
+      switchMap((params: any) => {
           this.userName = params.name;
-          return this.userService.getUserStatistic({userId: params.id, from: this.from, till: this.till});
+          return this.userService.getUserStatistic({userId: params.id, from: params.from, till: params.till});
         }
       )
     ).subscribe((data: IStatistic[]) => {
@@ -48,28 +50,12 @@ export class UserComponent implements OnInit, OnDestroy {
     });
   }
 
-  changeFromDate(event) {
-    this.userService.getUserStatistic({userId: this.userId, from: event, till: this.till}).pipe(
-      takeUntil(this.onDestroyed$)
-    ).subscribe((data: IStatistic[]) => {
-        this.views = data.map(item => item.page_views);
-        this.clicks = data.map(item => item.clicks);
-        this.dates = data.map(item => item.date).map((item: string) => new Date(item).toLocaleDateString());
-
-        this.drawCharts();
-      }, error => console.log(error));
-  }
-
-  changeTillDate(event) {
-    this.userService.getUserStatistic({userId: this.userId, from: this.from, till: event}).pipe(
-      takeUntil(this.onDestroyed$)
-    ).subscribe((data: IStatistic[]) => {
-        this.views = data.map(item => item.page_views);
-        this.clicks = data.map(item => item.clicks);
-        this.dates = data.map(item => item.date).map((item: string) => new Date(item).toLocaleDateString());
-
-        this.drawCharts();
-      });
+  changeDate(event, position) {
+    this.params = {
+      ...this.params,
+      [position]: event.target.value
+    };
+    this.navigate();
   }
 
   formatDate(date: Date, sub: number = 0): string {
@@ -118,6 +104,15 @@ export class UserComponent implements OnInit, OnDestroy {
         legend: {
           display: false
         },
+      }
+    });
+  }
+
+  private navigate(): void {
+    this.router.navigate([window.location.pathname], {
+      queryParams: {
+        ...this.route.snapshot.queryParams,
+        ...this.params
       }
     });
   }
