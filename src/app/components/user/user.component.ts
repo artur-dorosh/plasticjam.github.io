@@ -1,9 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { Chart } from 'chart.js';
 import { switchMap } from 'rxjs/operators';
-import { Subject } from 'rxjs';
 import { IStatistic } from '../../models/statistic.interface';
 
 @Component({
@@ -11,7 +10,7 @@ import { IStatistic } from '../../models/statistic.interface';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss']
 })
-export class UserComponent implements OnInit, OnDestroy {
+export class UserComponent implements OnInit {
   public userId: string;
   public userName: string;
 
@@ -115,10 +114,5 @@ export class UserComponent implements OnInit, OnDestroy {
         ...this.params
       }
     });
-  }
-
-  ngOnDestroy(): void {
-    this.onDestroyed$.next();
-    this.onDestroyed$.complete();
   }
 }

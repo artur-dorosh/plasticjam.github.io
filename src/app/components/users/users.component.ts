@@ -38,9 +38,7 @@ export class UsersComponent implements OnInit, OnDestroy {
           range: +params.range || defaultPagination.range
         };
 
-        return this.userService.getAllUsers(this.params).pipe(
-          takeUntil(this.onDestroyed$)
-        );
+        return this.userService.getAllUsers(this.params).pipe(takeUntil(this.onDestroyed$));
       })
     ).subscribe((data: {content: IUser[], totalPages: number, totalElements: number}) => {
       this.users = data.content;
