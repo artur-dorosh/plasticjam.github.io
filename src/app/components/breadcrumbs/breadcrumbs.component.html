@@ -1,8 +1,7 @@
 <div class="breadcrumb">
-  <div *ngFor="let breadcrumb of breadcrumbs" class="breadcrumb__item">
+  <div *ngFor="let breadcrumb of breadcrumbs; let last = last" class="breadcrumb__item">
     <span [routerLink]="breadcrumb.url"
-          routerLinkActive="breadcrumb__label--active"
-          [routerLinkActiveOptions]="{exact:true}"
+          [ngClass]="{'breadcrumb__label--active': last}"
           class="breadcrumb__label">
       {{ breadcrumb.label }}
     </span>
